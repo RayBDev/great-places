@@ -6,7 +6,7 @@ import useColorScheme from './hooks/useColorScheme';
 
 // Color scheme for light mode
 export const lightColors = {
-  primary: '#C2185B',
+  primary: '#fc9208',
   primaryDark: '#77002E',
   primaryLight: '#E06896',
   primaryContrast: '#fff',
@@ -22,7 +22,7 @@ export const lightColors = {
 
 // Color scheme for dark mode
 export const darkColors = {
-  primary: '#C2185B',
+  primary: '#fc9208',
   primaryDark: '#77002E',
   primaryLight: '#E06896',
   primaryContrast: '#fff',
@@ -55,23 +55,16 @@ const fontFamilies = {
 
 // Custom heights that include scaling
 const height = {
-  h75: {
-    height: verticalScale(300),
-  },
-  h1_4: {
-    height: '25%',
-  },
-  h3_5: {
-    height: '60%',
-  },
-  h3_20: {
-    height: '15%',
+  h17: {
+    height: scale(68),
   },
 };
 
 // Custom widths that include scaling
 const width = {
-  maxW36: scale(144),
+  w17: {
+    width: scale(68),
+  },
 };
 
 // Setup light theme
@@ -82,6 +75,7 @@ export const lightTheme = StyleSheet.create({
     fontFamilies,
   }),
   ...height,
+  ...width,
 });
 
 // Setup dark theme
@@ -92,6 +86,7 @@ export const darkTheme = StyleSheet.create({
     fontFamilies,
   }),
   ...height,
+  ...width,
 });
 
 /** Typescript Definitions for Whirlwind Dark and Light Themes */
