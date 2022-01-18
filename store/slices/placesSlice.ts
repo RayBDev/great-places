@@ -1,4 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import * as FileSystem from 'expo-file-system';
+
 import { Place } from '../../types/place';
 
 type InitialState = {
@@ -9,23 +11,47 @@ const initialState: InitialState = {
   places: [],
 };
 
+// Thunks
+export const addPlace = createAsyncThunk(
+  'cart/addPlace',
+  async (place: Omit<Place, 'id'>) => {
+    const fileName = place.image.split('/').pop();
+    if (FileSystem.documentDirectory && fileName) {
+      const newPath = FileSystem.documentDirectory + fileName;
+      try {
+        await FileSystem.moveAsync({
+          from: place.image,
+          to: newPath,
+        });
+        const newPlace: Place = {
+          id: new Date().toString(),
+          title: place.title,
+          image: newPath,
+        };
+        return newPlace;
+      } catch (err) {
+        console.log(err);
+        throw err;
+      }
+    }
+  }
+);
+
 export const placesSlice = createSlice({
   name: 'cart',
   initialState,
-  reducers: {
-    addPlace: (state, action: PayloadAction<Omit<Place, 'id'>>) => {
-      const newPlace: Place = {
-        id: new Date().toString(),
-        title: action.payload.title,
-        image: action.payload.image,
-      };
-      return {
-        places: state.places.concat(newPlace),
-      };
-    },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(addPlace.fulfilled, (state, action) => {
+      if (action.payload) {
+        return {
+          places: state.places.concat(action.payload),
+        };
+      } else {
+        return state;
+      }
+    });
   },
 });
-
-export const { addPlace } = placesSlice.actions;
 
 export default placesSlice.reducer;
