@@ -13,10 +13,11 @@ export const placesSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    addPlace: (state, action: PayloadAction<string>) => {
+    addPlace: (state, action: PayloadAction<Omit<Place, 'id'>>) => {
       const newPlace: Place = {
         id: new Date().toString(),
-        title: action.payload,
+        title: action.payload.title,
+        image: action.payload.image,
       };
       return {
         places: state.places.concat(newPlace),

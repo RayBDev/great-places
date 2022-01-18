@@ -14,7 +14,7 @@ const PlacesListScreen = ({ navigation }: RootStackScreenProps<'Places'>) => {
       data={places}
       renderItem={(itemData) => (
         <PlaceItem
-          image=""
+          image={itemData.item.image}
           title={itemData.item.title}
           address=""
           onSelect={() => {

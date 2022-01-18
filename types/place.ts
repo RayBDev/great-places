@@ -3,4 +3,6 @@ export type Place = {
   id: string;
   /** The title of the place */
   title: string;
+  /** The image uri of the place */
+  image: string;
 };
