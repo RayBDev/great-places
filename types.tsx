@@ -17,7 +17,7 @@ export type RootStackParamList = {
     /** The title of the place to display on the place detail screen */
     placeTitle: string;
     /** The ID of the place that will be displayed on the place detail screen */
-    placeId: string;
+    placeId: number;
   };
   NewPlace: undefined;
   Map: undefined;

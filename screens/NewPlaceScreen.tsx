@@ -23,7 +23,7 @@ const NewPlaceScreen = ({ navigation }: RootStackScreenProps<'NewPlace'>) => {
   };
 
   const savePlaceHandler = () => {
-    dispatch(addPlace({ title: titleValue, image: selectedImage }));
+    dispatch(addPlace({ title: titleValue, imageUri: selectedImage }));
     navigation.goBack();
   };
 

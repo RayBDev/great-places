@@ -9,11 +9,11 @@ type Props = {
   /** The address of the location */
   address: string;
   /** Image URI */
-  image: string;
+  imageUri: string;
   onSelect: () => void;
 };
 
-const PlaceItem = ({ onSelect, title, address, image }: Props) => {
+const PlaceItem = ({ onSelect, title, address, imageUri }: Props) => {
   const { t } = useTheme();
   return (
     <TouchableOpacity
@@ -21,7 +21,7 @@ const PlaceItem = ({ onSelect, title, address, image }: Props) => {
       style={[t.borderMuted, t.borderB, t.pY4, t.pX8, t.flexRow, t.itemsCenter]}
     >
       <Image
-        source={{ uri: image }}
+        source={{ uri: imageUri }}
         style={[t.w17, t.h17, t.roundedLg, t.bgInfo, t.borderPrimary, t.border]}
       />
       <View style={[t.mL6, t.w64, t.justifyCenter, t.itemsCenter]}>
