@@ -2,13 +2,17 @@ import React, { useState } from 'react';
 import { ScrollView, Text, TextInput, View } from 'react-native';
 
 import ImgPicker from '../components/ImgPicker';
+import LocationPicker from '../components/LocationPicker';
 import CustomButton from '../components/ui/CustomButton';
 import { useAppDispatch } from '../hooks/reduxHooks';
 import { addPlace } from '../store/slices/placesSlice';
 import { useTheme } from '../theme';
 import { RootStackScreenProps } from '../types';
 
-const NewPlaceScreen = ({ navigation }: RootStackScreenProps<'NewPlace'>) => {
+const NewPlaceScreen = ({
+  navigation,
+  route,
+}: RootStackScreenProps<'NewPlace'>) => {
   const { t } = useTheme();
   const [titleValue, setTitleValue] = useState('');
   const [selectedImage, setSelectedImage] = useState('');
@@ -37,6 +41,7 @@ const NewPlaceScreen = ({ navigation }: RootStackScreenProps<'NewPlace'>) => {
           value={titleValue}
         />
         <ImgPicker onImageTaken={imageTakenHandler} />
+        <LocationPicker navigation={navigation} route={route} />
         <CustomButton title="Save Place" onPress={savePlaceHandler} />
       </View>
     </ScrollView>
