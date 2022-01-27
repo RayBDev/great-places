@@ -58,12 +58,27 @@ const height = {
   h17: {
     height: scale(68),
   },
+  h7_20: {
+    height: '35%',
+  },
+  minH75: {
+    minHeight: 300,
+  },
+  h75: {
+    height: 300,
+  },
 };
 
 // Custom widths that include scaling
 const width = {
   w17: {
     width: scale(68),
+  },
+  w9_10: {
+    width: '90%',
+  },
+  maxW87: {
+    maxWidth: scale(348),
   },
 };
 

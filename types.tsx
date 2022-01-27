@@ -19,7 +19,16 @@ export type RootStackParamList = {
     /** The ID of the place that will be displayed on the place detail screen */
     placeId: number;
   };
-  NewPlace: undefined;
+  NewPlace:
+    | {
+        pickedLocation: {
+          /** The latitude of the location */
+          lat: number;
+          /** The longitude of the location */
+          lng: number;
+        };
+      }
+    | undefined;
   Map: undefined;
   NotFound: undefined;
 };

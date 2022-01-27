@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View, ActivityIndicator, Alert } from 'react-native';
 import * as Location from 'expo-location';
 
@@ -7,17 +7,28 @@ import CustomButton from './ui/CustomButton';
 import MapPreview from './MapPreview';
 import { RootStackParamList } from '../types';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Location as LocationType } from '../types/place';
 
 const LocationPicker = ({
   navigation,
-}: NativeStackScreenProps<RootStackParamList, keyof RootStackParamList>) => {
+  route,
+  onLocationPicked,
+}: NativeStackScreenProps<RootStackParamList, 'NewPlace'> & {
+  onLocationPicked: (locationData: LocationType) => void;
+}) => {
   const { t } = useTheme();
-  type LocationData = {
-    lat: number;
-    lng: number;
-  };
-  const [pickedLocation, setPickedLocation] = useState<LocationData>();
+
+  const [pickedLocation, setPickedLocation] = useState<LocationType>();
   const [isFetching, setIsFetching] = useState(false);
+
+  const mapPickedLocation = route.params?.pickedLocation;
+
+  useEffect(() => {
+    if (mapPickedLocation) {
+      setPickedLocation(mapPickedLocation);
+      onLocationPicked(mapPickedLocation);
+    }
+  }, [mapPickedLocation]);
 
   const verifyPermissions = async () => {
     const locationForegroundPermissionResult =
@@ -49,6 +60,10 @@ const LocationPicker = ({
       setIsFetching(true);
       const location = await Location.getCurrentPositionAsync();
       setPickedLocation({
+        lat: location.coords.latitude,
+        lng: location.coords.longitude,
+      });
+      onLocationPicked({
         lat: location.coords.latitude,
         lng: location.coords.longitude,
       });

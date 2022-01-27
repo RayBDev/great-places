@@ -3,6 +3,7 @@ import * as FileSystem from 'expo-file-system';
 
 import { Place } from '../../types/place';
 import { fetchPlaces, insertPlace } from '../../helpers/db';
+import vars from '../../env';
 
 type InitialState = {
   places: Place[];
@@ -15,7 +16,22 @@ const initialState: InitialState = {
 // Thunks
 export const addPlace = createAsyncThunk(
   'cart/addPlace',
-  async (place: Omit<Place, 'id'>) => {
+  async (place: Omit<Place, 'id' | 'address'>) => {
+    const response = await fetch(
+      `http://www.mapquestapi.com/geocoding/v1/reverse?key=${vars.mapQuestApi}&location=${place.lat},${place.lng}`
+    );
+
+    if (!response.ok) {
+      throw new Error('Something went wrong!');
+    }
+
+    const resData = await response.json();
+    if (!resData.results) {
+      throw new Error('Something went wrong!');
+    }
+
+    const address = `${resData.results[0].locations[0].street}, ${resData.results[0].locations[0].adminArea5}, ${resData.results[0].locations[0].adminArea3} ${resData.results[0].locations[0].postalCode}, ${resData.results[0].locations[0].adminArea1}`;
+
     const fileName = place.imageUri.split('/').pop();
     if (FileSystem.documentDirectory && fileName) {
       const newPath = FileSystem.documentDirectory + fileName;
@@ -28,9 +44,9 @@ export const addPlace = createAsyncThunk(
         const dbResult = await insertPlace(
           place.title,
           newPath,
-          'Dummy Address',
-          15.6,
-          12.3
+          address,
+          place.lat,
+          place.lng
         );
 
         if (dbResult.insertId) {
@@ -38,6 +54,9 @@ export const addPlace = createAsyncThunk(
             id: dbResult.insertId,
             title: place.title,
             imageUri: newPath,
+            address: address,
+            lat: place.lat,
+            lng: place.lng,
           };
         }
       } catch (err) {
@@ -83,6 +102,9 @@ export const placesSlice = createSlice({
                 id: place.id,
                 title: place.title,
                 imageUri: place.imageUri,
+                address: place.address,
+                lat: place.lat,
+                lng: place.lng,
               };
             }),
           };

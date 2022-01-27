@@ -20,7 +20,7 @@ const PlacesListScreen = ({ navigation }: RootStackScreenProps<'Places'>) => {
         <PlaceItem
           imageUri={itemData.item.imageUri}
           title={itemData.item.title}
-          address=""
+          address={itemData.item.address}
           onSelect={() => {
             navigation.navigate('PlaceDetail', {
               placeTitle: itemData.item.title,

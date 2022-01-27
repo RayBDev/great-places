@@ -8,14 +8,18 @@ import { useAppDispatch } from '../hooks/reduxHooks';
 import { addPlace } from '../store/slices/placesSlice';
 import { useTheme } from '../theme';
 import { RootStackScreenProps } from '../types';
+import { Location } from '../types/place';
 
 const NewPlaceScreen = ({
   navigation,
   route,
 }: RootStackScreenProps<'NewPlace'>) => {
   const { t } = useTheme();
+
   const [titleValue, setTitleValue] = useState('');
   const [selectedImage, setSelectedImage] = useState('');
+  const [selectedLocation, setSelectedLocation] = useState<Location>();
+
   const dispatch = useAppDispatch();
 
   const titleChangeHandler = (text: string) => {
@@ -26,9 +30,22 @@ const NewPlaceScreen = ({
     setSelectedImage(imagePath);
   };
 
+  const locationPickedHandler = (location: Location) => {
+    setSelectedLocation(location);
+  };
+
   const savePlaceHandler = () => {
-    dispatch(addPlace({ title: titleValue, imageUri: selectedImage }));
-    navigation.goBack();
+    if (titleValue && selectedImage && selectedLocation) {
+      dispatch(
+        addPlace({
+          title: titleValue,
+          imageUri: selectedImage,
+          lat: selectedLocation.lat,
+          lng: selectedLocation.lng,
+        })
+      );
+      navigation.goBack();
+    }
   };
 
   return (
@@ -41,7 +58,11 @@ const NewPlaceScreen = ({
           value={titleValue}
         />
         <ImgPicker onImageTaken={imageTakenHandler} />
-        <LocationPicker navigation={navigation} route={route} />
+        <LocationPicker
+          navigation={navigation}
+          route={route}
+          onLocationPicked={locationPickedHandler}
+        />
         <CustomButton title="Save Place" onPress={savePlaceHandler} />
       </View>
     </ScrollView>
