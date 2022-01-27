@@ -6,11 +6,19 @@ import { useTheme } from '../theme';
 import { RootStackScreenProps } from '../types';
 import { Location } from '../types/place';
 
-const MapScreen = ({ navigation }: RootStackScreenProps<'Map'>) => {
+const MapScreen = ({ navigation, route }: RootStackScreenProps<'Map'>) => {
   const { t } = useTheme();
-  const [selectedLocation, setSelectedLocation] = useState<Location>();
+  const initialLocation = route.params?.initialLocation;
+  const readonly = route.params?.readonly;
+
+  const [selectedLocation, setSelectedLocation] = useState<
+    Location | undefined
+  >(initialLocation);
 
   useLayoutEffect(() => {
+    if (readonly) {
+      return;
+    }
     navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity onPress={savePickedLocationHandler}>
@@ -35,6 +43,9 @@ const MapScreen = ({ navigation }: RootStackScreenProps<'Map'>) => {
   };
 
   const selectLocationHandler = (event: any) => {
+    if (readonly) {
+      return;
+    }
     setSelectedLocation({
       lat: event.nativeEvent.coordinate.latitude,
       lng: event.nativeEvent.coordinate.longitude,
@@ -42,8 +53,8 @@ const MapScreen = ({ navigation }: RootStackScreenProps<'Map'>) => {
   };
 
   const mapRegion = {
-    latitude: 37.78825,
-    longitude: -122.4324,
+    latitude: initialLocation ? initialLocation.lat : 37.78825,
+    longitude: initialLocation ? initialLocation.lng : -122.4324,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   };

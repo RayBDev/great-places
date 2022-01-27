@@ -29,7 +29,9 @@ export type RootStackParamList = {
         };
       }
     | undefined;
-  Map: undefined;
+  Map:
+    | { readonly: boolean; initialLocation: { lat: number; lng: number } }
+    | undefined;
   NotFound: undefined;
 };
 
